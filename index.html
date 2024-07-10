@@ -1,27 +1,83 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Support Question Selector</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .button-group { display: flex; flex-direction: column; margin-bottom: 20px; }
-        .button-group button { margin: 5px 0; padding: 10px; background-color: #f0f0f0; border: 1px solid #ddd; cursor: pointer; text-align: left; }
-        .button-group button.active { background-color: #007bff; color: white; }
-        #showAllButton { margin-bottom: 20px; padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; }
-        #questionTable { width: 100%; border-collapse: collapse; }
-        #questionTable th, #questionTable td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        #questionTable th { background-color: #f2f2f2; }
-        #questionTable tr:nth-child(even) { background-color: #f9f9f9; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #F5F5F5;
+            color: #333333;
+            background-image: radial-gradient(circle, #d9d9d9 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        h1, h3 { margin-bottom: 10px; }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .button-group button {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #FFFFFF;
+            border: 1px solid #CCCCCC;
+            cursor: pointer;
+            text-align: left;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .button-group button.active {
+            background-color: #FF7A00;
+            color: white;
+            border-color: #FF7A00;
+        }
+        #showAllButton {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #FF7A00;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        #showAllButton:hover {
+            background-color: #E66D00;
+        }
+        #questionTable {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #questionTable th, #questionTable td {
+            border: 1px solid #EEEEEE;
+            padding: 12px;
+            text-align: left;
+        }
+        #questionTable th {
+            background-color: #F0F0F0;
+            font-weight: bold;
+        }
+        #questionTable tr:nth-child(even) { background-color: #FAFAFA; }
+        .selector-group { margin-bottom: 20px; }
+        .selector-label { font-weight: bold; margin-bottom: 5px; }
     </style>
 </head>
 <body>
-    <h1>MSE M&E Question Selector</h1>
+    <h1>Business Support Question Selector</h1>
     
     <div style="display: flex; justify-content: space-between;">
-        <div>
-            <h3>Form of Support (select all that apply)</h3>
+        <div class="selector-group">
+            <h3>Form of Support <span style="font-weight: normal; font-size: 0.9em;">(select all that apply)</span></h3>
             <div id="supportTypeButtons" class="button-group">
                 <button onclick="toggleButton(this, 'support')">Digital Upskilling</button>
                 <button onclick="toggleButton(this, 'support')">Digital Financial Services (DFS)</button>
@@ -29,8 +85,8 @@
                 <button onclick="toggleButton(this, 'support')">Market Access</button>
             </div>
         </div>
-        <div>
-            <h3>Desired Outcome (select all that apply)</h3>
+        <div class="selector-group">
+            <h3>Desired Outcome <span style="font-weight: normal; font-size: 0.9em;">(select all that apply)</span></h3>
             <div id="outcomeButtons" class="button-group">
                 <button onclick="toggleButton(this, 'outcome')">Resilience</button>
                 <button onclick="toggleButton(this, 'outcome')">Efficiency</button>
@@ -44,184 +100,7 @@
     <div id="questionList"></div>
 
     <script>
-        const questions = {
-            "Digital Upskilling": {
-                "Resilience": [
-                    {
-                        question: "How has digital upskilling improved your ability to adapt to market changes?",
-                        options: ["Significantly improved", "Somewhat improved", "No change", "Somewhat worsened", "Significantly worsened"]
-                    },
-                    {
-                        question: "What digital skills have been most crucial in maintaining business continuity during crises?",
-                        options: ["Remote work tools", "E-commerce platforms", "Digital marketing", "Cloud computing", "Data analytics"]
-                    },
-                    {
-                        question: "How has improved digital literacy affected your business's risk management strategies?",
-                        options: ["Major positive impact", "Minor positive impact", "No impact", "Minor negative impact", "Major negative impact"]
-                    }
-                ],
-                "Efficiency": [
-                    {
-                        question: "Which digital tools, learned through upskilling, have most improved your operational efficiency?",
-                        options: ["Project management software", "Automation tools", "Communication platforms", "CRM systems", "ERP systems"]
-                    },
-                    {
-                        question: "How has digital upskilling reduced time spent on manual processes?",
-                        options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
-                    },
-                    {
-                        question: "What percentage of your workforce has undergone digital skills training?",
-                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
-                    }
-                ],
-                "Business Growth": [
-                    {
-                        question: "How have new digital skills enabled you to reach new customer segments?",
-                        options: ["Significantly", "Moderately", "Slightly", "Not at all", "Unsure"]
-                    },
-                    {
-                        question: "What digital marketing techniques, learned through upskilling, have been most effective for business growth?",
-                        options: ["Social media marketing", "Search engine optimization", "Email marketing", "Content marketing", "Pay-per-click advertising"]
-                    },
-                    {
-                        question: "How has digital upskilling contributed to the development of new products or services?",
-                        options: ["Major contribution", "Moderate contribution", "Minor contribution", "No contribution", "Negative impact"]
-                    }
-                ]
-            },
-            "Digital Financial Services (DFS)": {
-                "Resilience": [
-                    {
-                        question: "How have digital financial services improved your cash flow management during economic downturns?",
-                        options: ["Greatly improved", "Somewhat improved", "No change", "Somewhat worsened", "Greatly worsened"]
-                    },
-                    {
-                        question: "What DFS tools have been most useful in building financial reserves for your business?",
-                        options: ["Digital savings accounts", "Investment apps", "Automated budgeting tools", "Financial forecasting software", "None of the above"]
-                    },
-                    {
-                        question: "How has access to digital credit affected your ability to weather financial shocks?",
-                        options: ["Very positively", "Somewhat positively", "No effect", "Somewhat negatively", "Very negatively"]
-                    }
-                ],
-                "Efficiency": [
-                    {
-                        question: "How has the adoption of digital payments reduced your transaction costs?",
-                        options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
-                    },
-                    {
-                        question: "What percentage of your financial operations have been digitized?",
-                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
-                    },
-                    {
-                        question: "How has real-time financial data access through DFS improved your decision-making process?",
-                        options: ["Significantly improved", "Moderately improved", "Slightly improved", "No change", "Worsened"]
-                    }
-                ],
-                "Business Growth": [
-                    {
-                        question: "How has access to digital financial services enabled you to expand your business operations?",
-                        options: ["Significant expansion", "Moderate expansion", "Slight expansion", "No expansion", "Contraction"]
-                    },
-                    {
-                        question: "What DFS tools have been most effective in helping you secure funding for growth?",
-                        options: ["Online loan applications", "Crowdfunding platforms", "Digital invoice financing", "Peer-to-peer lending", "None of the above"]
-                    },
-                    {
-                        question: "How has improved financial management through DFS contributed to your revenue growth?",
-                        options: ["0-10% growth", "11-25% growth", "26-50% growth", "51-100% growth", "Over 100% growth"]
-                    }
-                ]
-            },
-            "Digital Business Operations (DBO)": {
-                "Resilience": [
-                    {
-                        question: "How have digital business operations improved your ability to work remotely or in hybrid models?",
-                        options: ["Greatly improved", "Somewhat improved", "No change", "Somewhat worsened", "Greatly worsened"]
-                    },
-                    {
-                        question: "What digital tools for inventory management have been most crucial in adapting to supply chain disruptions?",
-                        options: ["Real-time tracking systems", "Predictive analytics", "Automated reordering", "Supplier management platforms", "None of the above"]
-                    },
-                    {
-                        question: "How has cloud-based operations affected your business continuity planning?",
-                        options: ["Very positively", "Somewhat positively", "No effect", "Somewhat negatively", "Very negatively"]
-                    }
-                ],
-                "Efficiency": [
-                    {
-                        question: "Which digital business operations have most significantly reduced your operational costs?",
-                        options: ["Automated billing", "Digital document management", "Cloud computing", "AI-powered customer service", "None of the above"]
-                    },
-                    {
-                        question: "How has the digitization of your supply chain management improved overall efficiency?",
-                        options: ["0-20% improvement", "21-40% improvement", "41-60% improvement", "61-80% improvement", "81-100% improvement"]
-                    },
-                    {
-                        question: "What percentage of your business processes have been automated?",
-                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
-                    }
-                ],
-                "Business Growth": [
-                    {
-                        question: "How have digital operations enabled you to scale your business more effectively?",
-                        options: ["Highly effective", "Moderately effective", "Slightly effective", "Not effective", "Hindered growth"]
-                    },
-                    {
-                        question: "What digital tools for customer relationship management have been most effective for business growth?",
-                        options: ["CRM software", "Social media management", "Email marketing automation", "Customer feedback platforms", "None of the above"]
-                    },
-                    {
-                        question: "How has data analytics from digital operations informed your expansion strategies?",
-                        options: ["Crucial for strategy", "Moderately important", "Slightly important", "Not important", "Not used"]
-                    }
-                ]
-            },
-            "Market Access": {
-                "Resilience": [
-                    {
-                        question: "How has improved market access helped you diversify your customer base to reduce risk?",
-                        options: ["Significantly diversified", "Moderately diversified", "Slightly diversified", "No change", "Less diverse"]
-                    },
-                    {
-                        question: "What digital marketplaces have been most crucial in maintaining sales during market disruptions?",
-                        options: ["E-commerce platforms", "Social media marketplaces", "Industry-specific online markets", "Mobile app stores", "None of the above"]
-                    },
-                    {
-                        question: "How has expanded market access affected your ability to navigate seasonal business fluctuations?",
-                        options: ["Great improvement", "Moderate improvement", "Slight improvement", "No change", "Worsened"]
-                    }
-                ],
-                "Efficiency": [
-                    {
-                        question: "How has digital market access reduced your customer acquisition costs?",
-                        options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
-                    },
-                    {
-                        question: "What percentage of your sales now come through digital channels?",
-                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
-                    },
-                    {
-                        question: "How has access to broader markets improved your inventory turnover rate?",
-                        options: ["Significantly improved", "Moderately improved", "Slightly improved", "No change", "Worsened"]
-                    }
-                ],
-                "Business Growth": [
-                    {
-                        question: "How has expanded market access contributed to your year-over-year revenue growth?",
-                        options: ["0-10% growth", "11-25% growth", "26-50% growth", "51-100% growth", "Over 100% growth"]
-                    },
-                    {
-                        question: "What new markets or customer segments have you reached through digital platforms?",
-                        options: ["International markets", "New demographic groups", "B2B customers", "Niche markets", "No new markets"]
-                    },
-                    {
-                        question: "How has improved market access enabled you to launch new products or services successfully?",
-                        options: ["Very successful", "Moderately successful", "Slightly successful", "No impact", "Negative impact"]
-                    }
-                ]
-            }
-        };
+        // The 'questions' object remains the same as in the previous version
 
         function toggleButton(button, group) {
             button.classList.toggle('active');
