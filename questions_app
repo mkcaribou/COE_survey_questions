@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Support Question Selector</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        select, button { margin: 10px 0; padding: 5px; }
+        #questionTable { margin-top: 20px; width: 100%; border-collapse: collapse; }
+        #questionTable th, #questionTable td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        #questionTable th { background-color: #f2f2f2; }
+        #questionTable tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>Business Support Question Selector</h1>
+    <select id="supportType">
+        <option value="">Select Form of Support (Optional)</option>
+        <option value="digitalUpskilling">Digital Upskilling</option>
+        <option value="dfs">Digital Financial Services (DFS)</option>
+        <option value="dbo">Digital Business Operations (DBO)</option>
+        <option value="marketAccess">Market Access</option>
+    </select>
+    <select id="outcome">
+        <option value="">Select Desired Outcome (Optional)</option>
+        <option value="resilience">Resilience</option>
+        <option value="efficiency">Efficiency</option>
+        <option value="growth">Business Growth</option>
+    </select>
+    <button onclick="getQuestions()">Get Relevant Questions</button>
+    <div id="questionList"></div>
+
+    <script>
+        const questions = {
+            digitalUpskilling: {
+                resilience: [
+                    {
+                        question: "How has digital upskilling improved your ability to adapt to market changes?",
+                        options: ["Significantly improved", "Somewhat improved", "No change", "Somewhat worsened", "Significantly worsened"]
+                    },
+                    {
+                        question: "What digital skills have been most crucial in maintaining business continuity during crises?",
+                        options: ["Remote work tools", "E-commerce platforms", "Digital marketing", "Cloud computing", "Data analytics"]
+                    },
+                    {
+                        question: "How has improved digital literacy affected your business's risk management strategies?",
+                        options: ["Major positive impact", "Minor positive impact", "No impact", "Minor negative impact", "Major negative impact"]
+                    }
+                ],
+                efficiency: [
+                    {
+                        question: "Which digital tools, learned through upskilling, have most improved your operational efficiency?",
+                        options: ["Project management software", "Automation tools", "Communication platforms", "CRM systems", "ERP systems"]
+                    },
+                    {
+                        question: "How has digital upskilling reduced time spent on manual processes?",
+                        options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
+                    },
+                    {
+                        question: "What percentage of your workforce has undergone digital skills training?",
+                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
+                    }
+                ],
+                growth: [
+                    {
+                        question: "How have new digital skills enabled you to reach new customer segments?",
+                        options: ["Significantly", "Moderately", "Slightly", "Not at all", "Unsure"]
+                    },
+                    {
+                        question: "What digital marketing techniques, learned through upskilling, have been most effective for business growth?",
+                        options: ["Social media marketing", "Search engine optimization", "Email marketing", "Content marketing", "Pay-per-click advertising"]
+                    },
+                    {
+                        question: "How has digital upskilling contributed to the development of new products or services?",
+                        options: ["Major contribution", "Moderate contribution", "Minor contribution", "No contribution", "Negative impact"]
+                    }
+                ]
+            },
+            dfs: {
+                resilience: [
+                    {
+                        question: "How have digital financial services improved your cash flow management during economic downturns?",
+                        options: ["Greatly improved", "Somewhat improved", "No change", "Somewhat worsened", "Greatly worsened"]
+                    },
+                    {
+                        question: "What DFS tools have been most useful in building financial reserves for your business?",
+                        options: ["Digital savings accounts", "Investment apps", "Automated budgeting tools", "Financial forecasting software", "None of the above"]
+                    },
+                    {
+                        question: "How has access to digital credit affected your ability to weather financial shocks?",
+                        options: ["Very positively", "Somewhat positively", "No effect", "Somewhat negatively", "Very negatively"]
+                    }
+                ],
+                efficiency: [
+                    {
+                        question: "How has the adoption of digital payments reduced your transaction costs?",
+                        options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
+                    },
+                    {
+                        question: "What percentage of your financial operations have been digitized?",
+                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
+                    },
+                    {
+                        question: "How has real-time financial data access through DFS improved your decision-making process?",
+                        options: ["Significantly improved", "Moderately improved", "Slightly improved", "No change", "Worsened"]
+                    }
+                ],
+                growth: [
+                    {
+                        question: "How has access to digital financial services enabled you to expand your business operations?",
+                        options: ["Significant expansion", "Moderate expansion", "Slight expansion", "No expansion", "Contraction"]
+                    },
+                    {
+                        question: "What DFS tools have been most effective in helping you secure funding for growth?",
+                        options: ["Online loan applications", "Crowdfunding platforms", "Digital invoice financing", "Peer-to-peer lending", "None of the above"]
+                    },
+                    {
+                        question: "How has improved financial management through DFS contributed to your revenue growth?",
+                        options: ["0-10% growth", "11-25% growth", "26-50% growth", "51-100% growth", "Over 100% growth"]
+                    }
+                ]
+            },
+            dbo: {
+                resilience: [
+                    {
+                        question: "How have digital business operations improved your ability to work remotely or in hybrid models?",
+                        options: ["Greatly improved", "Somewhat improved", "No change", "Somewhat worsened", "Greatly worsened"]
+                    },
+                    {
+                        question: "What digital tools for inventory management have been most crucial in adapting to supply chain disruptions?",
+                        options: ["Real-time tracking systems", "Predictive analytics", "Automated reordering", "Supplier management platforms", "None of the above"]
+                    },
+                    {
+                        question: "How has cloud-based operations affected your business continuity planning?",
+                        options: ["Very positively", "Somewhat positively", "No effect", "Somewhat negatively", "Very negatively"]
+                    }
+                ],
+                efficiency: [
+                    {
+                        question: "Which digital business operations have most significantly reduced your operational costs?",
+                        options: ["Automated billing", "Digital document management", "Cloud computing", "AI-powered customer service", "None of the above"]
+                    },
+                    {
+                        question: "How has the digitization of your supply chain management improved overall efficiency?",
+                        options: ["0-20% improvement", "21-40% improvement", "41-60% improvement", "61-80% improvement", "81-100% improvement"]
+                    },
+                    {
+                        question: "What percentage of your business processes have been automated?",
+                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
+                    }
+                ],
+                growth: [
+                    {
+                        question: "How have digital operations enabled you to scale your business more effectively?",
+                        options: ["Highly effective", "Moderately effective", "Slightly effective", "Not effective", "Hindered growth"]
+                    },
+                    {
+                        question: "What digital tools for customer relationship management have been most effective for business growth?",
+                        options: ["CRM software", "Social media management", "Email marketing automation", "Customer feedback platforms", "None of the above"]
+                    },
+                    {
+                        question: "How has data analytics from digital operations informed your expansion strategies?",
+                        options: ["Crucial for strategy", "Moderately important", "Slightly important", "Not important", "Not used"]
+                    }
+                ]
+            },
+            marketAccess: {
+                resilience: [
+                    {
+                        question: "How has improved market access helped you diversify your customer base to reduce risk?",
+                        options: ["Significantly diversified", "Moderately diversified", "Slightly diversified", "No change", "Less diverse"]
+                    },
+                    {
+                        question: "What digital marketplaces have been most crucial in maintaining sales during market disruptions?",
+                        options: ["E-commerce platforms", "Social media marketplaces", "Industry-specific online markets", "Mobile app stores", "None of the above"]
+                    },
+                    {
+                        question: "How has expanded market access affected your ability to navigate seasonal business fluctuations?",
+                        options: ["Great improvement", "Moderate improvement", "Slight improvement", "No change", "Worsened"]
+                    }
+                ],
+                efficiency: [
+                    {
+                        question: "How has digital market access reduced your customer acquisition costs?",
+                        options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
+                    },
+                    {
+                        question: "What percentage of your sales now come through digital channels?",
+                        options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
+                    },
+                    {
+                        question: "How has access to broader markets improved your inventory turnover rate?",
+                        options: ["Significantly improved", "Moderately improved", "Slightly improved", "No change", "Worsened"]
+                    }
+                ],
+                growth: [
+                    {
+                        question: "How has expanded market access contributed to your year-over-year revenue growth?",
+                        options: ["0-10% growth", "11-25% growth", "26-50% growth", "51-100% growth", "Over 100% growth"]
+                    },
+                    {
+                        question: "What new markets or customer segments have you reached through digital platforms?",
+                        options: ["International markets", "New demographic groups", "B2B customers", "Niche markets", "No new markets"]
+                    },
+                    {
+                        question: "How has improved market access enabled you to launch new products or services successfully?",
+                        options: ["Very successful", "Moderately successful", "Slightly successful", "No impact", "Negative impact"]
+                    }
+                ]
+            }
+        };
+
+        function getQuestions() {
+            const supportType = document.getElementById('supportType').value;
+            const outcome = document.getElementById('outcome').value;
+            const questionList = document.getElementById('questionList');
+            
+            let tableHTML = `
+                <table id="questionTable">
+                    <tr>
+                        <th>Survey Question</th>
+                        <th>Answer Options</th>
+                        <th>Form of Support</th>
+                        <th>Outcome</th>
+                    </tr>
+            `;
+            
+            let hasQuestions = false;
+
+            for (let support in questions) {
+                if (supportType && support !== supportType) continue;
+                
+                for (let outc in questions[support]) {
+                    if (outcome && outc !== outcome) continue;
+                    
+                    questions[support][outc].forEach(q => {
+                        hasQuestions = true;
+                        tableHTML += `
+                            <tr>
+                                <td>${q.question}</td>
+                                <td>${q.options.join(", ")}</td>
+                                <td>${support.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</td>
+                                <td>${outc.charAt(0).toUpperCase() + outc.slice(1)}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            }
+            
+            tableHTML += '</table>';
+            
+            if (hasQuestions) {
+                questionList.innerHTML = tableHTML;
+            } else {
+                questionList.innerHTML = '<p>No questions found for the selected criteria. Please adjust your selection.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
