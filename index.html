@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,8 +6,11 @@
     <title>Business Support Question Selector</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        select, button { margin: 10px 0; padding: 5px; }
-        #questionTable { margin-top: 20px; width: 100%; border-collapse: collapse; }
+        .button-group { display: flex; flex-direction: column; margin-bottom: 20px; }
+        .button-group button { margin: 5px 0; padding: 10px; background-color: #f0f0f0; border: 1px solid #ddd; cursor: pointer; text-align: left; }
+        .button-group button.active { background-color: #007bff; color: white; }
+        #showAllButton { margin-bottom: 20px; padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+        #questionTable { width: 100%; border-collapse: collapse; }
         #questionTable th, #questionTable td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         #questionTable th { background-color: #f2f2f2; }
         #questionTable tr:nth-child(even) { background-color: #f9f9f9; }
@@ -15,26 +18,35 @@
 </head>
 <body>
     <h1>Business Support Question Selector</h1>
-    <select id="supportType">
-        <option value="">Select Form of Support (Optional)</option>
-        <option value="digitalUpskilling">Digital Upskilling</option>
-        <option value="dfs">Digital Financial Services (DFS)</option>
-        <option value="dbo">Digital Business Operations (DBO)</option>
-        <option value="marketAccess">Market Access</option>
-    </select>
-    <select id="outcome">
-        <option value="">Select Desired Outcome (Optional)</option>
-        <option value="resilience">Resilience</option>
-        <option value="efficiency">Efficiency</option>
-        <option value="growth">Business Growth</option>
-    </select>
-    <button onclick="getQuestions()">Get Relevant Questions</button>
+    
+    <div style="display: flex; justify-content: space-between;">
+        <div>
+            <h3>Form of Support</h3>
+            <div id="supportTypeButtons" class="button-group">
+                <button onclick="toggleButton(this, 'support')">Digital Upskilling</button>
+                <button onclick="toggleButton(this, 'support')">Digital Financial Services (DFS)</button>
+                <button onclick="toggleButton(this, 'support')">Digital Business Operations (DBO)</button>
+                <button onclick="toggleButton(this, 'support')">Market Access</button>
+            </div>
+        </div>
+        <div>
+            <h3>Desired Outcome</h3>
+            <div id="outcomeButtons" class="button-group">
+                <button onclick="toggleButton(this, 'outcome')">Resilience</button>
+                <button onclick="toggleButton(this, 'outcome')">Efficiency</button>
+                <button onclick="toggleButton(this, 'outcome')">Business Growth</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="showAllButton" onclick="showAllQuestions()">Show All Questions</button>
+
     <div id="questionList"></div>
 
     <script>
         const questions = {
-            digitalUpskilling: {
-                resilience: [
+            "Digital Upskilling": {
+                "Resilience": [
                     {
                         question: "How has digital upskilling improved your ability to adapt to market changes?",
                         options: ["Significantly improved", "Somewhat improved", "No change", "Somewhat worsened", "Significantly worsened"]
@@ -48,7 +60,7 @@
                         options: ["Major positive impact", "Minor positive impact", "No impact", "Minor negative impact", "Major negative impact"]
                     }
                 ],
-                efficiency: [
+                "Efficiency": [
                     {
                         question: "Which digital tools, learned through upskilling, have most improved your operational efficiency?",
                         options: ["Project management software", "Automation tools", "Communication platforms", "CRM systems", "ERP systems"]
@@ -62,7 +74,7 @@
                         options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
                     }
                 ],
-                growth: [
+                "Business Growth": [
                     {
                         question: "How have new digital skills enabled you to reach new customer segments?",
                         options: ["Significantly", "Moderately", "Slightly", "Not at all", "Unsure"]
@@ -77,8 +89,8 @@
                     }
                 ]
             },
-            dfs: {
-                resilience: [
+            "Digital Financial Services (DFS)": {
+                "Resilience": [
                     {
                         question: "How have digital financial services improved your cash flow management during economic downturns?",
                         options: ["Greatly improved", "Somewhat improved", "No change", "Somewhat worsened", "Greatly worsened"]
@@ -92,7 +104,7 @@
                         options: ["Very positively", "Somewhat positively", "No effect", "Somewhat negatively", "Very negatively"]
                     }
                 ],
-                efficiency: [
+                "Efficiency": [
                     {
                         question: "How has the adoption of digital payments reduced your transaction costs?",
                         options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
@@ -106,7 +118,7 @@
                         options: ["Significantly improved", "Moderately improved", "Slightly improved", "No change", "Worsened"]
                     }
                 ],
-                growth: [
+                "Business Growth": [
                     {
                         question: "How has access to digital financial services enabled you to expand your business operations?",
                         options: ["Significant expansion", "Moderate expansion", "Slight expansion", "No expansion", "Contraction"]
@@ -121,8 +133,8 @@
                     }
                 ]
             },
-            dbo: {
-                resilience: [
+            "Digital Business Operations (DBO)": {
+                "Resilience": [
                     {
                         question: "How have digital business operations improved your ability to work remotely or in hybrid models?",
                         options: ["Greatly improved", "Somewhat improved", "No change", "Somewhat worsened", "Greatly worsened"]
@@ -136,7 +148,7 @@
                         options: ["Very positively", "Somewhat positively", "No effect", "Somewhat negatively", "Very negatively"]
                     }
                 ],
-                efficiency: [
+                "Efficiency": [
                     {
                         question: "Which digital business operations have most significantly reduced your operational costs?",
                         options: ["Automated billing", "Digital document management", "Cloud computing", "AI-powered customer service", "None of the above"]
@@ -150,7 +162,7 @@
                         options: ["0-20%", "21-40%", "41-60%", "61-80%", "81-100%"]
                     }
                 ],
-                growth: [
+                "Business Growth": [
                     {
                         question: "How have digital operations enabled you to scale your business more effectively?",
                         options: ["Highly effective", "Moderately effective", "Slightly effective", "Not effective", "Hindered growth"]
@@ -165,8 +177,8 @@
                     }
                 ]
             },
-            marketAccess: {
-                resilience: [
+            "Market Access": {
+                "Resilience": [
                     {
                         question: "How has improved market access helped you diversify your customer base to reduce risk?",
                         options: ["Significantly diversified", "Moderately diversified", "Slightly diversified", "No change", "Less diverse"]
@@ -180,7 +192,7 @@
                         options: ["Great improvement", "Moderate improvement", "Slight improvement", "No change", "Worsened"]
                     }
                 ],
-                efficiency: [
+                "Efficiency": [
                     {
                         question: "How has digital market access reduced your customer acquisition costs?",
                         options: ["0-20% reduction", "21-40% reduction", "41-60% reduction", "61-80% reduction", "81-100% reduction"]
@@ -194,7 +206,7 @@
                         options: ["Significantly improved", "Moderately improved", "Slightly improved", "No change", "Worsened"]
                     }
                 ],
-                growth: [
+                "Business Growth": [
                     {
                         question: "How has expanded market access contributed to your year-over-year revenue growth?",
                         options: ["0-10% growth", "11-25% growth", "26-50% growth", "51-100% growth", "Over 100% growth"]
@@ -211,9 +223,19 @@
             }
         };
 
+        function toggleButton(button, group) {
+            button.classList.toggle('active');
+            getQuestions();
+        }
+
+        function showAllQuestions() {
+            document.querySelectorAll('.button-group button').forEach(btn => btn.classList.remove('active'));
+            getQuestions();
+        }
+
         function getQuestions() {
-            const supportType = document.getElementById('supportType').value;
-            const outcome = document.getElementById('outcome').value;
+            const activeSupports = Array.from(document.querySelectorAll('#supportTypeButtons button.active')).map(btn => btn.textContent);
+            const activeOutcomes = Array.from(document.querySelectorAll('#outcomeButtons button.active')).map(btn => btn.textContent);
             const questionList = document.getElementById('questionList');
             
             let tableHTML = `
@@ -229,19 +251,19 @@
             let hasQuestions = false;
 
             for (let support in questions) {
-                if (supportType && support !== supportType) continue;
+                if (activeSupports.length > 0 && !activeSupports.includes(support)) continue;
                 
-                for (let outc in questions[support]) {
-                    if (outcome && outc !== outcome) continue;
+                for (let outcome in questions[support]) {
+                    if (activeOutcomes.length > 0 && !activeOutcomes.includes(outcome)) continue;
                     
-                    questions[support][outc].forEach(q => {
+                    questions[support][outcome].forEach(q => {
                         hasQuestions = true;
                         tableHTML += `
                             <tr>
                                 <td>${q.question}</td>
                                 <td>${q.options.join(", ")}</td>
-                                <td>${support.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</td>
-                                <td>${outc.charAt(0).toUpperCase() + outc.slice(1)}</td>
+                                <td>${support}</td>
+                                <td>${outcome}</td>
                             </tr>
                         `;
                     });
@@ -256,6 +278,9 @@
                 questionList.innerHTML = '<p>No questions found for the selected criteria. Please adjust your selection.</p>';
             }
         }
+
+        // Initial load of all questions
+        showAllQuestions();
     </script>
 </body>
 </html>
